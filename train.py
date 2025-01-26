@@ -1,5 +1,5 @@
 from utils import *
-from dataset.dataset import Datasets
+from dataset import Datasets
 from torch.utils.data import DataLoader
 from model import Net
 from engine import *
