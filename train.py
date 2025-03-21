@@ -10,10 +10,10 @@ def main():
     seed(3407)
     torch.cuda.empty_cache()
 
-    # data_path =
-    # epoch_nums =
-    # head_nums =
-    # batch_size =
+    data_path =
+    epoch_nums = 220
+    head_nums = 12
+    batch_size = 8
 
     train_dataset = Datasets(data_path, 'isic2018', train=True)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, pin_memory=False, num_workers=0)
@@ -26,22 +26,19 @@ def main():
     optimizer = get_optimizer('AdamW', model)
     criterion = Loss(0.6, 0.4)
     scheduler = get_scheduler('CosineAnnealingLR', optimizer)
-   
+
     print("#————————————Start train!————————————#")
 
     for epoch in range(1, epoch_nums):
-        torch.cuda.empty_cache()
-
         loss_train, step = train_one_epoch(model, train_loader, optimizer, criterion, scheduler, step)
-        torch.cuda.empty_cache()
 
-        loss ,miou, all = val_one_epoch(model, val_loader, criterion, epoch)
-
+        loss, miou, all = val_one_epoch(model, val_loader, criterion, epoch)
 
     print("#————————————Start test!————————————#")
 
-    # model.load_state_dict(torch.load()) choose the best model for testing
-    # test_one_epoch(val_loader, model, criterion)
+    model.load_state_dict(torch.load())  # choose the best model for testing
+    test_one_epoch(val_loader, model, criterion)
+
 
 if __name__ == '__main__':
     main()
